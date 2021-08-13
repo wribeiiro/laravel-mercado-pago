@@ -1,0 +1,39 @@
+version: '3.3'
+
+services:
+  
+  #PHP Service
+  app:
+    container_name: php-mercado-pago
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    image: 'laravel-mercado-pago'
+    ports:
+      - "8001:80"
+    volumes:
+      - ./www/:/var/www/html
+    networks:
+      - app-network
+
+  #MySQL Service
+  db:
+    container_name: mysql-mercado-pago
+    image: mysql:5.7
+    restart: always
+    ports: 
+      - "3309:3306"
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=laravel-mercado-pago
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MYSQL_USER=laravel-mercado-pago
+      - MYSQL_PASSWORD=root
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
